@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './Form.css';
 import InputBase from '../InputBase/InputBase';
 import { OTHERCARDS } from '../constants';
+import { cardNumberValidation } from '../validations';
 
 const INIT_CARD = { card: '', cardHolder: '', expiry: '', securityCode: '' };
 
@@ -25,10 +26,14 @@ export default class Form extends Component {
   };
 
   handleValidation = (type, value) => {
+    let errorText;
     switch (type) {
       case 'card':
-        this.setState({ cardType: this.findDebitCardType(value) });
-        // setState cardType, error
+        errorText = cardNumberValidation(value);
+        this.setState((prevState) => ({
+          cardType: this.findDebitCardType(value),
+          error: { ...prevState.error, cardError: errorText },
+        }));
         break;
       case 'cardHolder':
         // checks for spaces and numbers
@@ -81,7 +86,7 @@ export default class Form extends Component {
   render() {
     const inputData = [
       { label: 'Card Number', name: 'card', type: 'text' },
-      { label: "Card Holder's", name: 'cardHolder', type: 'text' },
+      { label: 'Card Holder', name: 'cardHolder', type: 'text' },
       { label: 'Expiration Date (MM/YY)', name: 'expiry', type: 'text' },
       { label: 'Security Code', name: 'securityCode', type: 'text' },
     ];
