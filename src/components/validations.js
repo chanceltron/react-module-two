@@ -35,6 +35,13 @@ export const expiryValidation = (value) => {
 export const onlyTextValidation = (value) => {
   if (value) {
     if (/^[a-zA-Z ]*$/i.test(value)) {
+      return undefined;
+    } else {
+      return 'Alphabetical Letters Only';
     }
+  } else {
+    return undefined;
   }
 };
+
+export const securityCodeValidation = (minLength, value) => (value && value.length < minLength ? 'Must be at least 3 Characters' : undefined);
